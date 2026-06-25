@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mijn Website</title>
+</head>
+<body>
+
+<h2>Voer tekst in</h2>
+
+<input type="text" id="myText">
+
+<button onclick="saveText()">Save</button>
+<button onclick="downloadText()">Download</button>
+
+<script>
+
+async function saveText() {
+    const text = document.getElementById("myText").value;
+
+    await fetch(
+        "JOUW_GOOGLE_SCRIPT_URL_HIER",
+        {
+            method: "POST",
+            body: JSON.stringify({
+                text: text
+            })
+        }
+    );
+
+    alert("Opgeslagen!");
+}
+
+function downloadText() {
+    const text = document.getElementById("myText").value;
+
+    const blob = new Blob([text], { type: "text/plain" });
+
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "text.txt";
+    a.click();
+}
+
+</script>
+
+</body>
+</html>
