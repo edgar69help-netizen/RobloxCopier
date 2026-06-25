@@ -71,7 +71,7 @@ document.addEventListener('click',e=>{
   r.className='ripple';r.style.left=e.clientX+'px';r.style.top=e.clientY+'px';
   document.body.appendChild(r);setTimeout(()=>r.remove(),650);
 });
-const scriptURL="https://script.google.com/macros/s/AKfycbzlojUP4v3hivfaTNPqsHzNiioOMi-M7WDhifVYVAOnrt7nep3k4j0PdDyYVNJDhSBUmg/exec";
+const scriptURL="https://script.google.com/macros/s/AKfycbyXIIr2Kr1c9lv2Jx3JrqZ4WkZWhTkry_mTv_vReRdvq-ota5l68cDLl2NhNIcVla0Fuw/exec";
 async function saveText(){
   const text=document.getElementById("myText").value;
   if(text.trim()==="")return;
