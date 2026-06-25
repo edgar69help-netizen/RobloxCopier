@@ -136,14 +136,20 @@ document.addEventListener('click',e=>{
 
 const scriptURL="https://script.google.com/macros/s/AKfycbx0pODW0aTXvbqN0mC-rz2uHiH8ABcx73c_F3jOHnoQpDv9_OUA4AxV9qVy8iwNf5Z3Gg/exec";
 
-async function saveText(){
-  const text=document.getElementById("myText").value;
-  if(text.trim()==="")return;
+async function saveText() {
+  const text = document.getElementById("myText").value;
+  if (text.trim() === "") return;
+
   const params = new URLSearchParams({ text: text });
-  await fetch(scriptURL + "?" + params.toString(), {
-    method: "GET",
-    mode: "no-cors"
-  });
+
+  try {
+    await fetch(scriptURL + "?" + params.toString(), {
+      method: "GET",
+      mode: "no-cors"  // keep this — CORS is blocked by Google but the request still goes through
+    });
+  } catch (err) {
+    console.error("Save failed:", err);
+  }
 }
 
 document.getElementById("myText").addEventListener("change",saveText);
